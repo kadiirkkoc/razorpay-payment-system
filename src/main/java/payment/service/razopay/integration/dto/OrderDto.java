@@ -11,5 +11,6 @@ public class OrderDto {
     private String currency;
     private String receipt;
     private List<Object> notes;
+    private String paymentMethodId;
 
 }
