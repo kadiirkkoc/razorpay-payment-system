@@ -2,10 +2,7 @@ package payment.service.razopay.integration.controller;
 
 import com.razorpay.Customer;
 import com.razorpay.RazorpayException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import payment.service.razopay.integration.dto.CustomerDto;
 import payment.service.razopay.integration.service.CustomerService;
 
@@ -27,7 +24,7 @@ public class CustomerController {
     }
 
     @PostMapping("/create")
-    public CustomerDto create(CustomerDto customerDto) throws RazorpayException {
+    public CustomerDto create(@RequestBody  CustomerDto customerDto) throws RazorpayException {
         return customerService.createCustomer(customerDto);
     }
 }
