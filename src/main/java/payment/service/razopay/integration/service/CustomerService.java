@@ -18,13 +18,13 @@ import java.util.Optional;
 @Configuration
 public class CustomerService {
 
-    private RazorpayClient client;
+        private RazorpayClient client;
 
-    @Value("${razorpay.api.key}")
-    private String razorpayKey;
+        @Value("${razorpay.api.key}")
+        private String razorpayKey;
 
-    @Value("${razorpay.api.secretKey}")
-    private String razorpaySecretKey;
+        @Value("${razorpay.api.secretKey}")
+        private String razorpaySecretKey;
 
     public CustomerDto createCustomer(CustomerDto customerDto) throws RazorpayException {
         this.client = new RazorpayClient(razorpayKey,razorpaySecretKey);
