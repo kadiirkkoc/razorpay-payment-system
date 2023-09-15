@@ -1,10 +1,8 @@
 package payment.service.razopay.integration.controller;
 
 import com.razorpay.RazorpayException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.razorpay.Token;
+import org.springframework.web.bind.annotation.*;
 import payment.service.razopay.integration.dto.PaymentDto;
 import payment.service.razopay.integration.dto.TokenDto;
 import payment.service.razopay.integration.service.TokenService;
@@ -23,4 +21,9 @@ public class TokenController {
     public TokenDto create(@RequestBody TokenDto tokenDto) throws RazorpayException {
         return tokenService.createToken(tokenDto);
     }
+
+//    @GetMapping("/get")
+//    public TokenDto getCardDetailsFromToken(@RequestBody TokenDto tokenDto) throws RazorpayException{
+//        return tokenService.fetchCardPropertiesFromToken(tokenDto);
+//    }
 }
