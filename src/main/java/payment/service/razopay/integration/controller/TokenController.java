@@ -1,9 +1,7 @@
 package payment.service.razopay.integration.controller;
 
 import com.razorpay.RazorpayException;
-import com.razorpay.Token;
 import org.springframework.web.bind.annotation.*;
-import payment.service.razopay.integration.dto.PaymentDto;
 import payment.service.razopay.integration.dto.TokenDto;
 import payment.service.razopay.integration.service.TokenService;
 

@@ -4,7 +4,7 @@ import com.razorpay.Customer;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import payment.service.razopay.integration.dto.CustomerDto;
@@ -18,16 +18,14 @@ import java.util.Optional;
 @Configuration
 public class CustomerService {
 
-        private RazorpayClient client;
+    @Qualifier("RazorpayClient")
+    private final RazorpayClient client;
 
-        @Value("${razorpay.api.key}")
-        private String razorpayKey;
-
-        @Value("${razorpay.api.secretKey}")
-        private String razorpaySecretKey;
+    public CustomerService(RazorpayClient client) {
+        this.client = client;
+    }
 
     public CustomerDto createCustomer(CustomerDto customerDto) throws RazorpayException {
-        this.client = new RazorpayClient(razorpayKey,razorpaySecretKey);
         JSONObject customerRequest = new JSONObject();
         customerRequest.put("name",customerDto.getName());
         customerRequest.put("contact",customerDto.getContact());
@@ -49,7 +47,6 @@ public class CustomerService {
     }
 
     public List<CustomerDto> fetchAllCustomers() throws RazorpayException {
-        this.client = new RazorpayClient(razorpayKey,razorpaySecretKey);
         Optional<List<Customer>> customers = Optional.ofNullable(client.customers.fetchAll());
 
         List<CustomerDto> customerDtos = new ArrayList<>();
@@ -66,7 +63,6 @@ public class CustomerService {
     }
 
     public CustomerDto fetchCustomerById(String id) throws RazorpayException {
-        this.client = new RazorpayClient(razorpayKey,razorpaySecretKey);
         Customer customer = client.customers.fetch(id);
         CustomerDto customerDto = new CustomerDto();
         customerDto.setCustomerId(customer.get("id").toString());
@@ -79,7 +75,6 @@ public class CustomerService {
     }
 
     public CustomerDto updateCustomer(CustomerDto customerDto) throws RazorpayException{
-        this.client = new RazorpayClient(razorpayKey,razorpaySecretKey);
         JSONObject updateParams = new JSONObject();
         updateParams.put("name",customerDto.getName());
         updateParams.put("contact",customerDto.getContact());

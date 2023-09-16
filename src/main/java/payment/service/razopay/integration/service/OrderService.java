@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import payment.service.razopay.integration.data.Note;
 import payment.service.razopay.integration.dto.OrderDto;
+import payment.service.razopay.integration.excepitons.NotFoundExceptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,24 +60,35 @@ public class OrderService {
     //ERROR HERE
     public OrderDto fetchOrderById(String id) throws RazorpayException{
         this.client = new RazorpayClient(razorpayKey,razorpaySecretKey);
-        Order order = client.orders.fetch(id);
-        OrderDto orderDto = new OrderDto();
-        orderDto.setOrderId(order.get("id").toString());
-        orderDto.setAmount(Double.parseDouble(order.get("amount").toString()));
-        orderDto.setReceipt(order.get("receipt").toString());
-        orderDto.setCurrency(order.get("currency").toString());
-        return orderDto;
+        try{
+            Order order = client.orders.fetch(id);
+            OrderDto orderDto = new OrderDto();
+            orderDto.setOrderId(order.get("id").toString());
+            orderDto.setAmount(Double.parseDouble(order.get("amount").toString()));
+            orderDto.setReceipt(order.get("receipt").toString());
+            orderDto.setCurrency(order.get("currency").toString());
+            return orderDto;
+        }
+        catch (RazorpayException e){
+            throw new RazorpayException(e.getMessage());
+        }
+
+
     }
     //look at here
     public OrderDto updateOrder(OrderDto orderDto) throws RazorpayException{
         this.client = new RazorpayClient(razorpayKey,razorpaySecretKey);
-        JSONObject orderRequest = new JSONObject();
-        JSONObject notes = new JSONObject();
+        JSONObject orderRequest = createJsonObject();
+        JSONObject notes = createJsonObject();
         notes.put("notes_1",orderDto.getNotes().get(0));
         orderRequest.put("notes",notes);
         Order updatedOrder = client.orders.edit(orderDto.getOrderId().toString(),orderRequest);;
 
         OrderDto orderDto1 = new OrderDto();
             return orderDto1;
+    }
+
+    private JSONObject createJsonObject(){
+        return new JSONObject();
     }
 }
