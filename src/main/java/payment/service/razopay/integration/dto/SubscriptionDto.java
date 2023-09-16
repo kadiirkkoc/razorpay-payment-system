@@ -15,5 +15,4 @@ public class SubscriptionDto {
     private int amount;
     private String currency;
     private String description;
-
 }
