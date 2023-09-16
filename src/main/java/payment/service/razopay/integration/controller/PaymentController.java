@@ -1,12 +1,10 @@
 package payment.service.razopay.integration.controller;
 
 
-import com.razorpay.Payment;
 import com.razorpay.RazorpayException;
 import org.springframework.web.bind.annotation.*;
-import payment.service.razopay.integration.dto.OrderDto;
-import payment.service.razopay.integration.dto.PaymentDto;
-import payment.service.razopay.integration.service.PaymentService;
+import payment.service.razopay.integration.dto.PaymentLinkDto;
+import payment.service.razopay.integration.service.PaymentLinkService;
 
 import java.util.List;
 
@@ -14,24 +12,24 @@ import java.util.List;
 @RequestMapping("/razorpay/payment")
 public class PaymentController {
 
-    private final PaymentService paymentService;
+    private final PaymentLinkService paymentLinkService;
 
-    public PaymentController(PaymentService paymentService) {
-        this.paymentService = paymentService;
+    public PaymentController(PaymentLinkService paymentLinkService) {
+        this.paymentLinkService = paymentLinkService;
     }
 
     @PostMapping("/create")
-    public PaymentDto create(@RequestBody PaymentDto paymentDto) throws RazorpayException {
-        return paymentService.createPayment(paymentDto);
+    public PaymentLinkDto create(@RequestBody PaymentLinkDto paymentLinkDto) throws RazorpayException {
+        return paymentLinkService.createPayment(paymentLinkDto);
     }
 
     @GetMapping("/getAll")
-    public List<PaymentDto> getAll() throws RazorpayException {
-        return paymentService.fetchAllPaymentLinks();
+    public List<PaymentLinkDto> getAll() throws RazorpayException {
+        return paymentLinkService.fetchAllPaymentLinks();
     }
 
     @GetMapping("/getById/{id}")
-    public PaymentDto getById(@PathVariable("id") String id) throws RazorpayException {
-        return paymentService.fetchPaymentLinkById(id);
+    public PaymentLinkDto getById(@PathVariable("id") String id) throws RazorpayException {
+        return paymentLinkService.fetchPaymentLinkById(id);
     }
 }
