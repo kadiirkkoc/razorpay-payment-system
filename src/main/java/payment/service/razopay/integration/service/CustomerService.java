@@ -34,10 +34,6 @@ public class CustomerService {
         customerRequest.put("email",customerDto.getEmail());
         customerRequest.put("fail_existing",customerDto.getFail_existing());
         customerRequest.put("gstin",customerDto.getGstin());
-        JSONObject notes = new JSONObject();
-        notes.put("notes_key_1","Tea, Earl Grey, Hot");
-        notes.put("notes_key_2","Tea, Earl Grey… decaf.");
-        customerRequest.put("notes",notes);
         Customer customer =  client.customers.create(customerRequest);
 
         CustomerDto customerDto1 = new CustomerDto();
@@ -60,8 +56,36 @@ public class CustomerService {
         customers.get().forEach(customer -> {
             CustomerDto customerDto = new CustomerDto();
             customerDto.setCustomerId(customer.get("id").toString());
+            customerDto.setName(customer.get("name").toString());
+            customerDto.setContact(customer.get("contact").toString());
+            customerDto.setEmail(customer.get("email").toString());
+            customerDto.setGstin(customer.get("gstin").toString());
             customerDtos.add(customerDto);
         });
         return customerDtos;
+    }
+
+    public CustomerDto fetchCustomerById(String id) throws RazorpayException {
+        this.client = new RazorpayClient(razorpayKey,razorpaySecretKey);
+        Customer customer = client.customers.fetch(id);
+        CustomerDto customerDto = new CustomerDto();
+        customerDto.setCustomerId(customer.get("id").toString());
+        customerDto.setName(customer.get("name").toString());
+        customerDto.setContact(customer.get("contact").toString());
+        customerDto.setEmail(customer.get("email").toString());
+        customerDto.setFail_existing(customer.get("fail_existing") != null ? customer.get("fail_existing").toString() : "");
+        customerDto.setGstin(customer.get("gstin").toString());
+        return customerDto;
+    }
+
+    public CustomerDto updateCustomer(CustomerDto customerDto) throws RazorpayException{
+        this.client = new RazorpayClient(razorpayKey,razorpaySecretKey);
+        JSONObject updateParams = new JSONObject();
+        updateParams.put("name",customerDto.getName());
+        updateParams.put("contact",customerDto.getContact());
+        updateParams.put("email",customerDto.getEmail());
+        updateParams.put("gstin",customerDto.getGstin());
+        Customer updatedCustomer = client.customers.edit(customerDto.getCustomerId().toString(),updateParams);
+        return customerDto;
     }
 }

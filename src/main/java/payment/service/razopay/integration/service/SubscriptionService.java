@@ -55,8 +55,9 @@ public class SubscriptionService {
         linesItem.put("item",item);
         addons.add(linesItem);
         subscriptionRequest.put("addons",addons);
-        Subscription order = client.subscriptions.create(subscriptionRequest);
-        subscriptionDto.setSubscription_id(order.get("id").toString());
+        Subscription subscription = client.subscriptions.create(subscriptionRequest);
+        subscriptionDto.setSubscription_id(subscription.get("id").toString());
         return subscriptionDto;
     }
+
 }

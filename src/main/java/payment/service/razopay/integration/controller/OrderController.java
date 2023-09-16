@@ -1,9 +1,7 @@
 package payment.service.razopay.integration.controller;
 
-import com.razorpay.Order;
 import com.razorpay.RazorpayException;
 import org.springframework.web.bind.annotation.*;
-import payment.service.razopay.integration.dto.CustomerDto;
 import payment.service.razopay.integration.dto.OrderDto;
 import payment.service.razopay.integration.service.OrderService;
 
@@ -21,11 +19,11 @@ public class OrderController {
 
     @GetMapping("/getAll")
     public List<OrderDto> getAll() throws RazorpayException {
-        return orderService.fetchAllCustomers();
+        return orderService.fetchAllOrders();
     }
 
-    @GetMapping("/getById")
-    public OrderDto getById(String id) throws RazorpayException {
+    @GetMapping("/getById/{id}")
+    public OrderDto getById(@PathVariable("id") String id) throws RazorpayException {
         return orderService.fetchOrderById(id);
     }
 

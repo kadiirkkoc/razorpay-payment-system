@@ -23,8 +23,18 @@ public class CustomerController {
         return customerService.fetchAllCustomers();
     }
 
+    @GetMapping("/getById/{id}")
+    public CustomerDto getAll(@PathVariable("id") String id) throws RazorpayException {
+        return customerService.fetchCustomerById(id);
+    }
+
     @PostMapping("/create")
     public CustomerDto create(@RequestBody  CustomerDto customerDto) throws RazorpayException {
         return customerService.createCustomer(customerDto);
+    }
+
+    @PutMapping
+    public CustomerDto update(@RequestBody  CustomerDto customerDto) throws RazorpayException {
+        return customerService.updateCustomer(customerDto);
     }
 }

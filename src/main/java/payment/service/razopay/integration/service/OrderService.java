@@ -6,6 +6,7 @@ import com.razorpay.RazorpayException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import payment.service.razopay.integration.data.Note;
 import payment.service.razopay.integration.dto.OrderDto;
 
 import java.util.ArrayList;
@@ -28,24 +29,19 @@ public class OrderService {
         this.client = new RazorpayClient(razorpayKey,razorpaySecretKey);
         JSONObject orderRequest = new JSONObject();
         orderRequest.put("amount",orderDto.getAmount());
-        orderRequest.put("currency","INR");
+        orderRequest.put("currency",orderDto.getCurrency());
         orderRequest.put("receipt", orderDto.getReceipt());
-        JSONObject notes = new JSONObject();
-        notes.put("notes_key_1","Tea, Earl Grey, Hot");
-        notes.put("notes_key_1","Tea, Earl Grey, Hot");
-        orderRequest.put("notes",notes);
+//        JSONObject notesObject = new JSONObject();
+//        for (Note note : orderDto.getNotes()) {
+//            notesObject.put(note.getKey(), note.getValue());
+//        }
+//        orderRequest.put("notes", notesObject);
         Order order = client.orders.create(orderRequest);
-        OrderDto orderDto1 = new OrderDto();
-        if (order!=null){
-            orderDto1.setOrderId(order.get("id").toString());
-            orderDto1.setAmount(Integer.parseInt(order.get("amount").toString()));
-            orderDto1.setCurrency(order.get("currency").toString());
-            orderDto1.setReceipt(order.get("receipt").toString());
-        }
-        return orderDto1;
+        orderDto.setOrderId(order.get("id").toString());
+        return orderDto;
     }
 
-    public List<OrderDto> fetchAllCustomers() throws RazorpayException {
+    public List<OrderDto> fetchAllOrders() throws RazorpayException {
         this.client = new RazorpayClient(razorpayKey,razorpaySecretKey);
         Optional<List<Order>> orderList = Optional.ofNullable(client.orders.fetchAll());
         List<OrderDto> orderDtos = new ArrayList<>();
@@ -60,6 +56,7 @@ public class OrderService {
         return orderDtos;
     }
 
+    //ERROR HERE
     public OrderDto fetchOrderById(String id) throws RazorpayException{
         this.client = new RazorpayClient(razorpayKey,razorpaySecretKey);
         Order order = client.orders.fetch(id);
@@ -75,9 +72,7 @@ public class OrderService {
         this.client = new RazorpayClient(razorpayKey,razorpaySecretKey);
         JSONObject orderRequest = new JSONObject();
         JSONObject notes = new JSONObject();
-        notes.put("notes_key_1",orderDto.getNotes().get(0));
-        notes.put("notes_key_2",orderDto.getNotes().get(1));
-        notes.put("notes_key_1",orderDto.getNotes().toString());
+        notes.put("notes_1",orderDto.getNotes().get(0));
         orderRequest.put("notes",notes);
         Order updatedOrder = client.orders.edit(orderDto.getOrderId().toString(),orderRequest);;
 

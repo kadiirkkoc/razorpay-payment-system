@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import payment.service.razopay.integration.dto.OrderDto;
 import payment.service.razopay.integration.dto.PaymentDto;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -53,5 +55,27 @@ public class PaymentService {
         paymentDto.setCustomer_id(customer1.get("id").toString());
         return paymentDto;
 
+    }
+
+    public List<PaymentDto> fetchAllPaymentLinks() throws RazorpayException {
+        this.client = new RazorpayClient(razorpayKey,razorpaySecretKey);
+        Optional<List<PaymentLink>> paymentLinks = Optional.ofNullable(client.paymentLink.fetchAll());
+        List<PaymentDto> paymentDtos = new ArrayList<>();
+        paymentLinks.get().forEach(paymentLink -> {
+            PaymentDto paymentDto = new PaymentDto();
+            paymentDto.setPayment_id(paymentLink.get("id"));
+            paymentDto.setOrder_id(paymentLink.get("order_id"));
+            paymentDtos.add(paymentDto);
+
+        });
+        return paymentDtos;
+    }
+
+    public PaymentDto fetchPaymentLinkById(String id) throws RazorpayException {
+        this.client = new RazorpayClient(razorpayKey,razorpaySecretKey);
+        PaymentLink paymentLink = client.paymentLink.fetch(id);
+        PaymentDto paymentDto = new PaymentDto();
+        paymentDto.setPayment_id(paymentLink.get("id").toString());
+        return paymentDto;
     }
 }
